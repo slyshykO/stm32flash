@@ -560,7 +560,9 @@ int main(int argc, char* argv[]) {
 			}
 
 			if (verify) {
-				uint8_t compare[len];
+                uint8_t* compare = (uint8_t*)malloc(len);
+                if(compare == NULL)
+                    goto close;
 				unsigned int offset, rlen;
 
 				offset = 0;
@@ -570,6 +572,7 @@ int main(int argc, char* argv[]) {
 					s_err = stm32_read_memory(stm, addr + offset, compare + offset, rlen);
 					if (s_err != STM32_ERR_OK) {
 						fprintf(stderr, "Failed to read memory at address 0x%08x\n", addr + offset);
+                        free(compare);
 						goto close;
 					}
 					offset += rlen;
@@ -583,12 +586,14 @@ int main(int argc, char* argv[]) {
 								buffer [r],
 								compare[r]
 							);
+                            free(compare);
 							goto close;
 						}
 						++failed;
+                        free(compare);
 						goto again;
 					}
-
+                free(compare);
 				failed = 0;
 			}
 
