@@ -1,3 +1,10 @@
 stm32flash
 *.o
+*.exe
+*.lib
+*.bin
+*.obj
+*.pdb
+*.user*
 parsers/parsers.a
+build/*
