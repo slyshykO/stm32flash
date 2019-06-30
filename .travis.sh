@@ -3,7 +3,7 @@ echo "-- C compilers available"
 ls -1 /usr/bin/gcc*
 ls -1 /usr/bin/clang*
 ls -1 /usr/bin/scan-build*
-echo "----"
+echo "-----"
 
 if [ "$TRAVIS_OS_NAME" == "linux" ]; then
 	sudo apt-get update -qq || true
