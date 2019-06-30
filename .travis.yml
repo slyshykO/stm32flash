@@ -1,0 +1,20 @@
+sudo: true
+language: c
+compiler:
+  - gcc
+  - clang
+os:
+  - linux
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - clang
+      - g++-5
+      - gcc-5
+script:
+  - git fetch --tags
+  - printenv
+  - cmake --version
+  - ./.travis.sh
