@@ -14,9 +14,9 @@
 
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+  USA.
 */
-
 
 #ifndef _H_UTILS
 #define _H_UTILS
@@ -28,6 +28,6 @@ char     cpu_le();
 uint32_t be_u32(const uint32_t v);
 uint32_t le_u32(const uint32_t v);
 
-void printStatus(FILE *fd, int condition);
+void printStatus(FILE* fd, int condition);
 
 #endif

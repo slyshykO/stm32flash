@@ -14,7 +14,8 @@
 
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+  USA.
 */
 
 #include <stdint.h>
@@ -23,37 +24,33 @@
 #include "serial.h"
 #include "port.h"
 
-
 extern struct port_interface port_serial;
 extern struct port_interface port_i2c;
 
-static struct port_interface *ports[] = {
-	&port_serial,
-	&port_i2c,
-	NULL,
+static struct port_interface* ports[] = {
+    &port_serial,
+    &port_i2c,
+    NULL,
 };
 
-
-port_err_t port_open(struct port_options *ops, struct port_interface **outport)
+port_err_t port_open(struct port_options* ops, struct port_interface** outport)
 {
-	int ret;
-	static struct port_interface **port;
+    int                            ret;
+    static struct port_interface** port;
 
-	for (port = ports; *port; port++) {
-		ret = (*port)->open(*port, ops);
-		if (ret == PORT_ERR_NODEV)
-			continue;
-		if (ret == PORT_ERR_OK)
-			break;
-		fprintf(stderr, "Error probing interface \"%s\"\n",
-			(*port)->name);
-	}
-	if (*port == NULL) {
-		fprintf(stderr, "Cannot handle device \"%s\"\n",
-			ops->device);
-		return PORT_ERR_UNKNOWN;
-	}
+    for (port = ports; *port; port++) {
+        ret = (*port)->open(*port, ops);
+        if (ret == PORT_ERR_NODEV)
+            continue;
+        if (ret == PORT_ERR_OK)
+            break;
+        fprintf(stderr, "Error probing interface \"%s\"\n", (*port)->name);
+    }
+    if (*port == NULL) {
+        fprintf(stderr, "Cannot handle device \"%s\"\n", ops->device);
+        return PORT_ERR_UNKNOWN;
+    }
 
-	*outport = *port;
-	return PORT_ERR_OK;
+    *outport = *port;
+    return PORT_ERR_OK;
 }
