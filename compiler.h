@@ -21,19 +21,6 @@
 #ifndef _H_COMPILER
 #define _H_COMPILER
 
-#if defined(__GNUC__)
-#    undef __unused
-#    undef __maybe_unused
-#    define __unused __attribute__((unused))
-#    define __maybe_unused __attribute__((unused))
-#endif
-
-#ifndef __unused
-#    define __unused
-#endif
-
-#ifndef __maybe_unused
-#    define __maybe_unused
-#endif
+#define UNUSED(X) ((void) X)
 
 #endif /* _H_COMPILER */

@@ -34,10 +34,12 @@
 
 #if !defined(__linux__)
 
-static port_err_t i2c_open(struct port_interface __unused* port,
-                           struct port_options __unused* ops)
+static port_err_t i2c_open(struct port_interface* port,
+                           struct port_options*   ops)
 {
     return PORT_ERR_NODEV;
+    UNUSED(port);
+    UNUSED(ops);
 }
 
 struct port_interface port_i2c = {

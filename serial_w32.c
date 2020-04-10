@@ -92,10 +92,11 @@ static serial_t* serial_open(const char* device)
     return h;
 }
 
-static void serial_flush(const serial_t __unused* h)
+static void serial_flush(const serial_t* h)
 {
     /* We shouldn't need to flush in non-overlapping (blocking) mode */
     /* tcflush(h->fd, TCIFLUSH); */
+    UNUSED(h);
 }
 
 static void serial_close(serial_t* h)

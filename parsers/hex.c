@@ -214,11 +214,12 @@ parser_err_t hex_read(void* storage, void* data, unsigned int* len)
     return PARSER_ERR_OK;
 }
 
-parser_err_t hex_write(void __unused* storage,
-                       void __unused* data,
-                       unsigned int __unused len)
+parser_err_t hex_write(void* storage, void* data, unsigned int len)
 {
     return PARSER_ERR_RDONLY;
+    UNUSED(storage);
+    UNUSED(data);
+    UNUSED(len);
 }
 
 parser_t PARSER_HEX =

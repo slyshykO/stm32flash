@@ -6,11 +6,7 @@
 
 #include "unistd.h"
 
-#ifdef __cplusplus
-extern "C"
-#endif
-    void
-    usleep(unsigned long waitTime)
+void usleep(unsigned long waitTime)
 {
     if (waitTime >= 1000) {
         HANDLE        timer;
