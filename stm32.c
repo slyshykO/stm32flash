@@ -869,7 +869,7 @@ static stm32_err_t
      * differently. */
     /* 0x45 is clock no-stretching version of Extended Erase for I2C port. */
     if (stm32_send_command(stm, stm->cmd->er) != STM32_ERR_OK) {
-        fprintf(stderr, "Can't initiate chip mass erase!\n");
+        fprintf(stderr, "Can't initiate chip page erase!\n");
         return STM32_ERR_UNKNOWN;
     }
 
