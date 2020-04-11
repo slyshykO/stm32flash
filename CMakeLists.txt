@@ -27,40 +27,8 @@ endmacro()
 
 project(stm32flash C)
 
-set(SRC_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/compiler.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/dev_table.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/i2c.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/init.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/init.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/main.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/port.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/port.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/serial.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/serial_common.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/serial_platform.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/stm32.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/stm32.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/utils.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/utils.h
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/binary.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/binary.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/hex.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/hex.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/parser.h
-
-    )
-
 include(CheckIncludeFile)
-CHECK_INCLUDE_FILE(unistd.h STM32FLASH_HAVE_UNISTD_H)
-if (STM32FLASH_HAVE_UNISTD_H)
-    add_definitions(-DSTM32FLASH_HAVE_UNISTD_H)
-else()
-    list(APPEND SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32/unistd.h)
-    list(APPEND SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32/unistd.c)
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32)
-endif()
+CHECK_INCLUDE_FILE(unistd.h HAVE_UNISTD_H)
 
 include(CheckCSourceCompiles)
 check_c_source_compiles("
@@ -86,18 +54,48 @@ check_c_source_compiles("
   HAVE_SSIZE_T
 )
 
-if( NOT HAVE_GETOPT)
-    list(APPEND SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32/getopt.h)
-    list(APPEND SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32/getopt.c)
-endif()
+set(SRC_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/compiler.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dev_table.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/i2c.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/init.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/init.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/port.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/port.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/serial.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/serial_common.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/serial_platform.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/stm32.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/stm32.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils.h
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/binary.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/binary.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/hex.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/hex.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/parser.h
+
+    $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32/unistd.h>
+    $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32/unistd.c>
+    $<$<NOT:$<BOOL:${HAVE_GETOPT}>>:${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32/getopt.h>
+    $<$<NOT:$<BOOL:${HAVE_GETOPT}>>:${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32/getopt.c>
+
+    )
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         $<$<BOOL:${HAVE_GETOPT}>:STM32FLASH_HAVE_GETOPT>
         $<$<BOOL:${HAVE_SSIZE_T}>:STM32FLASH_HAVE_SSIZE_T>
+        $<$<BOOL:${HAVE_UNISTD_H}>:STM32FLASH_HAVE_UNISTD_H>
         $<$<C_COMPILER_ID:MSVC>:__WIN32__>
 )
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32>
+    )
 
 
 #======================= clang-format ==========================================
