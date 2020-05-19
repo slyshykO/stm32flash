@@ -55,32 +55,32 @@ check_c_source_compiles("
 )
 
 set(SRC_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/compiler.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/dev_table.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/i2c.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/init.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/init.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/main.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/port.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/port.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/serial.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/serial_common.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/serial_platform.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/stm32.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/stm32.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/utils.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/utils.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/compiler.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dev_table.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/i2c.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/init.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/init.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/port.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/port.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/serial.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/serial_common.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/serial_platform.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/stm32.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/stm32.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils.h
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/binary.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/binary.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/hex.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/hex.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/parsers/parser.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/parsers/binary.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/parsers/binary.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/parsers/hex.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/parsers/hex.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/parsers/parser.h
 
-    $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32/unistd.h>
-    $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32/unistd.c>
-    $<$<NOT:$<BOOL:${HAVE_GETOPT}>>:${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32/getopt.h>
-    $<$<NOT:$<BOOL:${HAVE_GETOPT}>>:${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32/getopt.c>
+    $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32/unistd.h>
+    $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32/unistd.c>
+    $<$<NOT:$<BOOL:${HAVE_GETOPT}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32/getopt.h>
+    $<$<NOT:$<BOOL:${HAVE_GETOPT}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32/getopt.c>
 
     )
 
@@ -94,23 +94,22 @@ target_compile_definitions(${PROJECT_NAME}
 )
 target_include_directories(${PROJECT_NAME}
     PRIVATE
-        $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32>
+        $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32>
     )
 
 
 #======================= clang-format ==========================================
 set(FORMAT_OBJECTS
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/parsers
-    ${CMAKE_CURRENT_SOURCE_DIR}/unistd_win32
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/parsers
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/win32
 )
 
 if (NOT DEFINED CLANG_FORMAT)
     find_program(CLANG_FORMAT "clang-format"
                      HINTS
                      "d:/projects/qt/libclang_80/libclang/bin"
-                     "d:/bin/msys64/mingw64/bin"
-                 )
+                     "d:/bin/msys64/mingw64/bin" )
 endif()
 
 if(CLANG_FORMAT)
