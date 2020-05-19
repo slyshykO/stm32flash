@@ -169,11 +169,13 @@ static port_err_t
     return PORT_ERR_OK;
 }
 
-static port_err_t i2c_gpio(struct port_interface __unused* port,
-                           serial_gpio_t __unused n,
-                           int __unused level)
+static port_err_t
+    i2c_gpio(struct port_interface* port, serial_gpio_t n, int level)
 {
     return PORT_ERR_OK;
+    (void) port;
+    (void) n;
+    (void) level;
 }
 
 static const char* i2c_get_cfg_str(struct port_interface* port)
@@ -193,10 +195,11 @@ static struct varlen_cmd i2c_cmd_get_reply[] = {{0x10, 11},
                                                 {0x12, 18},
                                                 {/* sentinel */}};
 
-static port_err_t i2c_flush(struct port_interface __unused* port)
+static port_err_t i2c_flush(struct port_interface* port)
 {
     /* We shouldn't need to flush I2C */
     return PORT_ERR_OK;
+    (void) port;
 }
 
 struct port_interface port_i2c = {
