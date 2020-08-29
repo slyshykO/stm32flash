@@ -55,12 +55,15 @@ check_c_source_compiles("
 )
 
 set(SRC_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
+    )
+
+set(LIB_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/compiler.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/dev_table.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/i2c.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/init.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/init.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/port.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/port.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/serial.h
@@ -81,21 +84,34 @@ set(SRC_FILES
     $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32/unistd.c>
     $<$<NOT:$<BOOL:${HAVE_GETOPT}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32/getopt.h>
     $<$<NOT:$<BOOL:${HAVE_GETOPT}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32/getopt.c>
+)
 
-    )
+source_group("lib" FILES ${LIB_SRC})
+source_group("src" FILES ${SRC_FILES})
 
-add_executable(${PROJECT_NAME} ${SRC_FILES})
-target_compile_definitions(${PROJECT_NAME}
-    PRIVATE
+add_library(stm32flashinternal ${LIB_SRC})
+target_compile_definitions(stm32flashinternal
+    PUBLIC
         $<$<BOOL:${HAVE_GETOPT}>:STM32FLASH_HAVE_GETOPT>
         $<$<BOOL:${HAVE_SSIZE_T}>:STM32FLASH_HAVE_SSIZE_T>
         $<$<BOOL:${HAVE_UNISTD_H}>:STM32FLASH_HAVE_UNISTD_H>
         $<$<C_COMPILER_ID:MSVC>:__WIN32__>
 )
-target_include_directories(${PROJECT_NAME}
-    PRIVATE
+target_include_directories(stm32flashinternal
+    PUBLIC
         $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32>
-    )
+)
+
+add_executable(${PROJECT_NAME} ${SRC_FILES})
+target_link_libraries(${PROJECT_NAME} stm32flashinternal)
+#target_compile_definitions(${PROJECT_NAME}
+#    PRIVATE
+#        $<$<BOOL:${HAVE_GETOPT}>:STM32FLASH_HAVE_GETOPT>
+#        $<$<BOOL:${HAVE_SSIZE_T}>:STM32FLASH_HAVE_SSIZE_T>
+#        $<$<BOOL:${HAVE_UNISTD_H}>:STM32FLASH_HAVE_UNISTD_H>
+#        $<$<C_COMPILER_ID:MSVC>:__WIN32__>
+#)
+
 
 
 #======================= clang-format ==========================================
