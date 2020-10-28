@@ -101,18 +101,13 @@ target_include_directories(stm32flashinternal
     PUBLIC
         $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32>
 )
+target_compile_options(stm32flashinternal
+    PUBLIC
+        $<$<C_COMPILER_ID:GCC>:-Wall -Wextra>
+)
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME} stm32flashinternal)
-#target_compile_definitions(${PROJECT_NAME}
-#    PRIVATE
-#        $<$<BOOL:${HAVE_GETOPT}>:STM32FLASH_HAVE_GETOPT>
-#        $<$<BOOL:${HAVE_SSIZE_T}>:STM32FLASH_HAVE_SSIZE_T>
-#        $<$<BOOL:${HAVE_UNISTD_H}>:STM32FLASH_HAVE_UNISTD_H>
-#        $<$<C_COMPILER_ID:MSVC>:__WIN32__>
-#)
-
-
 
 #======================= clang-format ==========================================
 set(FORMAT_OBJECTS
