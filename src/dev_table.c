@@ -65,9 +65,14 @@ static uint32_t f7[] = {SZ_32K, SZ_32K, SZ_32K, SZ_32K, SZ_128K, SZ_256K, 0};
 
 // clang-format off
 /*
- * Device table, corresponds to the "Bootloader device-dependant parameters"
+ * Device table, corresponds to the "Bootloader device-dependent parameters"
  * table in ST document AN2606.
  * Note that the option bytes upper range is inclusive!
+ *
+ * When adding new devices, please double-check agaist the chip-specific
+ * sections and reference manuals, where also flash address and option
+ * byte ranges can be found. In the commit message, please reference the
+ * source documents including their revision.
  */
 const stm32_dev_t devices[] = {
     /* ID   "name"                              SRAM-address-range      FLASH-address-range    PPS  PSize   Option-byte-addr-range  System-mem-addr-range   Flags */
@@ -105,11 +110,11 @@ const stm32_dev_t devices[] = {
     {0x434, "STM32F469xx/479xx"               , 0x20003000, 0x20060000, 0x08000000, 0x08200000,  1, f4db  , 0x1FFEC000, 0x1FFFC00F, 0x1FFF0000, 0x1FFF7800, 0},
     {0x463, "STM32F413xx/423xx"               , 0x20003000, 0x20050000, 0x08000000, 0x08180000,  1, f2f4  , 0x1FFFC000, 0x1FFFC00F, 0x1FFF0000, 0x1FFF7800, 0},
     /* G0 */
-    {0x460, "STM32G07xxx/08xxx"               , 0x20003000, 0x20009000, 0x08000000, 0x08020000,  1, p_2k  , 0x1FFF7800, 0x1FFF787F, 0x1FFF0000, 0x1FFF7000, 0},
-    {0x466, "STM32G03xxx/04xxx"               , 0x20001000, 0x20009000, 0x08000000, 0x08020000,  1, p_2k  , 0x1FFF7800, 0x1FFF787F, 0x1FFF0000, 0x1FFF2000, 0},
+    {0x466, "STM32G03xxx/04xxx"               , 0x20001000, 0x20002000, 0x08000000, 0x08010000,  1, p_2k  , 0x1FFF7800, 0x1FFF787F, 0x1FFF0000, 0x1FFF2000, 0},
+    {0x460, "STM32G07xxx/08xxx"               , 0x20002700, 0x20009000, 0x08000000, 0x08020000,  1, p_2k  , 0x1FFF7800, 0x1FFF787F, 0x1FFF0000, 0x1FFF7000, 0},
     /* G4 */
-    {0x468, "STM32G431xx/441xx"               , 0x20004000, 0x20009000, 0x08000000, 0x08020000,  1, p_2k  , 0x1FFF7800, 0x1FFF787F, 0x1FFF0000, 0x1FFF7000, 0},
-    {0x469, "STM32G47xxx/48xxx"               , 0x20004000, 0x20009000, 0x08000000, 0x08080000,  1, p_2k  , 0x1FFF7800, 0x1FFF787F, 0x1FFF0000, 0x1FFF7000, 0},
+    {0x468, "STM32G431xx/441xx"               , 0x20004000, 0x20005800, 0x08000000, 0x08020000,  1, p_2k  , 0x1FFF7800, 0x1FFF782F, 0x1FFF0000, 0x1FFF7000, 0},
+    {0x469, "STM32G47xxx/48xxx"               , 0x20004000, 0x20018000, 0x08000000, 0x08080000,  1, p_2k  , 0x1FFF7800, 0x1FFF782F, 0x1FFF0000, 0x1FFF7000, 0},
     /* F7 */
     {0x452, "STM32F72xxx/73xxx"               , 0x20004000, 0x20040000, 0x08000000, 0x08080000,  1, f2f4  , 0x1FFF0000, 0x1FFF001F, 0x1FF00000, 0x1FF0EDC0, 0},
     {0x449, "STM32F74xxx/75xxx"               , 0x20004000, 0x20050000, 0x08000000, 0x08100000,  1, f7    , 0x1FFF0000, 0x1FFF001F, 0x1FF00000, 0x1FF0EDC0, 0},
@@ -120,7 +125,7 @@ const stm32_dev_t devices[] = {
     {0x457, "STM32L01xxx/02xxx"               , 0x20000800, 0x20000800, 0x08000000, 0x08004000, 32, p_128 , 0x1FF80000, 0x1FF8001F, 0x1FF00000, 0x1FF01000, 0},
     {0x425, "STM32L031xx/041xx"               , 0x20001000, 0x20002000, 0x08000000, 0x08008000, 32, p_128 , 0x1FF80000, 0x1FF8001F, 0x1FF00000, 0x1FF01000, 0},
     {0x417, "STM32L05xxx/06xxx"               , 0x20001000, 0x20002000, 0x08000000, 0x08010000, 32, p_128 , 0x1FF80000, 0x1FF8001F, 0x1FF00000, 0x1FF01000, F_NO_ME},
-    {0x447, "STM32L07xxx/08xxx"               , 0x20002000, 0x20005000, 0x08000000, 0x08030000, 32, p_128 , 0x1FF80000, 0x1FF8001F, 0x1FF00000, 0x1FF02000, 0},
+    {0x447, "STM32L07xxx/08xxx"               , 0x20002000, 0x20005000, 0x08000000, 0x08030000, 32, p_128 , 0x1FF80000, 0x1FF8001F, 0x1FF00000, 0x1FF02000, F_NO_ME},
     /* L1 */
     {0x416, "STM32L1xxx6(8/B)"                , 0x20000800, 0x20004000, 0x08000000, 0x08020000, 16, p_256 , 0x1FF80000, 0x1FF8001F, 0x1FF00000, 0x1FF01000, F_NO_ME},
     {0x429, "STM32L1xxx6(8/B)A"               , 0x20001000, 0x20008000, 0x08000000, 0x08020000, 16, p_256 , 0x1FF80000, 0x1FF8001F, 0x1FF00000, 0x1FF01000, F_NO_ME},
@@ -132,6 +137,7 @@ const stm32_dev_t devices[] = {
     {0x462, "STM32L45xxx/46xxx"               , 0x20003100, 0x20020000, 0x08000000, 0x08080000,  1, p_2k  , 0x1FFF7800, 0x1FFF780F, 0x1FFF0000, 0x1FFF7000, F_PEMPTY},
     {0x415, "STM32L47xxx/48xxx"               , 0x20003100, 0x20018000, 0x08000000, 0x08100000,  1, p_2k  , 0x1FFF7800, 0x1FFFF80F, 0x1FFF0000, 0x1FFF7000, 0},
     {0x461, "STM32L496xx/4A6xx"               , 0x20003100, 0x20040000, 0x08000000, 0x08100000,  1, p_2k  , 0x1FFF7800, 0x1FFFF80F, 0x1FFF0000, 0x1FFF7000, 0},
+    {0x470, "STM32L4Rxx/4Sxx"                 , 0x20003200, 0x200A0000, 0x08000000, 0x08100000,  1, p_2k  , 0x1FFF7800, 0x1FFFF80F, 0x1FFF0000, 0x1FFF7000, 0},
     /* These are not (yet) in AN2606: */
     {0x641, "Medium_Density PL"               , 0x20000200, 0x20005000, 0x08000000, 0x08020000,  4, p_1k  , 0x1FFFF800, 0x1FFFF80F, 0x1FFFF000, 0x1FFFF800, 0},
     {0x9a8, "STM32W-128K"                     , 0x20000200, 0x20002000, 0x08000000, 0x08020000,  4, p_1k  , 0x08040800, 0x0804080F, 0x08040000, 0x08040800, 0},

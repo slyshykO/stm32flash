@@ -80,11 +80,21 @@ set(LIB_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/parsers/hex.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/parsers/parser.h
 
-    $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32/unistd.h>
-    $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32/unistd.c>
-    $<$<NOT:$<BOOL:${HAVE_GETOPT}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32/getopt.h>
-    $<$<NOT:$<BOOL:${HAVE_GETOPT}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/win32/getopt.c>
 )
+
+if(NOT HAVE_UNISTD_H)
+    list(APPEND LIB_SRC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/win32/unistd.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/win32/unistd.c
+    )
+endif()
+
+if(NOT HAVE_GETOPT)
+    list(APPEND LIB_SRC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/win32/getopt.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/win32/getopt.c
+    )
+endif()
 
 source_group("lib" FILES ${LIB_SRC})
 source_group("src" FILES ${SRC_FILES})
