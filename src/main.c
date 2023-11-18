@@ -42,6 +42,9 @@
 
 #if defined(__WIN32__) || defined(__CYGWIN__)
 #    include <windows.h>
+#if !defined(__RPC_CALLEE)
+#define __RPC_CALLEE
+#endif
 #endif
 
 #define VERSION "0.5.1"
